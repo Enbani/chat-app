@@ -1,29 +1,35 @@
 require('./config/config.js');
 const express = require('express');
+const http = require('http');
 const path = require('path');
-
-
-
+const socketIO = require('socket.io');
+// set direct path as this is what express.static expects
 const publicPath = path.join(__dirname, '../public');
 
 const app = express();
 const port = process.env.PORT;
 
+var server = http.createServer(app);
+var io = socketIO(server); //this returns a websocket server
+
+
 app.use(express.static(publicPath));
 
-app.listen(port, () => {
-  console.log(`\n\nServer up and listening on port:${port}`);
+// lets you register an event listener
+io.on('connection', (socket) => {
+  console.log('New user connected');
+
+  socket.on("disconnect", () => {
+    console.log('Disconnected from client.');
+  })
 });
 
-// const path = require('path');
-// const express = require('express');
-//
-// const publicPath = path.join(__dirname, '../public');
-//
-//
-// app.use(express.static(publicPath));
-//
-//
-// app.listen(3000, () => {
-//   console.log('server is up on port 3000');
-// })
+
+
+
+
+
+
+server.listen(port, () => {
+  console.log(`\n\nServer up and listening on port:${port}\n\n`);
+});
