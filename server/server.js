@@ -17,11 +17,24 @@ app.use(express.static(publicPath));
 
 // lets you register an event listener
 io.on('connection', (socket) => {
+  // calls to socket.on() are event listeners that listen for events from client
   console.log('New user connected');
+
+  // calls to socket.emit() are event emitters that send events to the client
+
+  socket.emit('newMessage', {
+    from: 'banz@gmail.com',
+    text: 'What is going on hombre??',
+    createdAt: Date.now()
+  });
+
+  socket.on('createMessage', (message) => {
+    console.log('Message retrieved from client:\n', message);
+  })
 
   socket.on("disconnect", () => {
     console.log('Disconnected from client.');
-  })
+  });
 });
 
 
