@@ -3,6 +3,8 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketIO = require('socket.io');
+
+const {generateMessage} = require('./utils/message')
 // set direct path as this is what express.static expects
 const publicPath = path.join(__dirname, '../public');
 
@@ -21,25 +23,13 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   // calls to socket.emit() are event emitters that send events to the client
-  socket.emit('newMessage', {
-    from: 'admin',
-    text: 'Welcome to the super secret (not so much) chat app.',
-    createdAt: Date.now()
-  });
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
-  socket.broadcast.emit('newMessage', {
-    from: 'admin',
-    text: 'New user joined.',
-    createdAt: Date.now()
-  });
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined.'));
 
   socket.on('createMessage', (message) => {
     console.log('Message retrieved from client:\n', message);
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    })
+    io.emit('newMessage', generateMessage(message.from, message.text));
     // socket.broadcast.emit('newMessage', {
     //   from: message.from,
     //   text: message.text,
