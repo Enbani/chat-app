@@ -21,7 +21,17 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   // calls to socket.emit() are event emitters that send events to the client
+  socket.emit('newMessage', {
+    from: 'admin',
+    text: 'Welcome to the super secret (not so much) chat app.',
+    createdAt: Date.now()
+  });
 
+  socket.broadcast.emit('newMessage', {
+    from: 'admin',
+    text: 'New user joined.',
+    createdAt: Date.now()
+  });
 
   socket.on('createMessage', (message) => {
     console.log('Message retrieved from client:\n', message);
@@ -30,6 +40,11 @@ io.on('connection', (socket) => {
       text: message.text,
       createdAt: new Date().getTime()
     })
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text: message.text,
+    //   createdAt: new Date().getTime()
+    // });
   })
 
   socket.on("disconnect", () => {
