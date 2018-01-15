@@ -22,14 +22,14 @@ io.on('connection', (socket) => {
 
   // calls to socket.emit() are event emitters that send events to the client
 
-  socket.emit('newMessage', {
-    from: 'banz@gmail.com',
-    text: 'What is going on hombre??',
-    createdAt: Date.now()
-  });
 
   socket.on('createMessage', (message) => {
     console.log('Message retrieved from client:\n', message);
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    })
   })
 
   socket.on("disconnect", () => {

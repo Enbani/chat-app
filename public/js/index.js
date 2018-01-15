@@ -4,10 +4,6 @@ socket.on('connect', function () {
   console.log('Connected to server.');
 
   // socket.emit() sends event to server
-  socket.emit('createMessage', {
-    from: 'melissa@gmail.com',
-    text: "Welcome to the jungle sweet child of mine!"
-  });
 });;
 
 // socket.on() listens to events from server
