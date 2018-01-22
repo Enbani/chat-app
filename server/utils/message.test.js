@@ -12,6 +12,7 @@ describe('generateMessage', () => {
 
     expect(res.from).toBe(from);
     expect(res.text).toBe(text);
+    console.log(res.createdAt);
     expect(res.createdAt).toBeA('number');
   });
 });
